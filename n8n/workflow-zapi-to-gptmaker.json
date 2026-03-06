@@ -1,0 +1,127 @@
+{
+  "name": "Z-API → GPTMaker (Recibir mensaje WhatsApp)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "webhook/zapi",
+        "responseMode": "onReceived",
+        "responseData": "allEntries",
+        "options": {}
+      },
+      "id": "a1b2c3d4-1111-4000-8000-000000000001",
+      "name": "Webhook Z-API",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [250, 300],
+      "webhookId": "zapi-incoming"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "condition-fromMe",
+              "leftValue": "={{ $json.body.fromMe }}",
+              "rightValue": false,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a1b2c3d4-2222-4000-8000-000000000002",
+      "name": "Filtrar fromMe",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [480, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.gptmaker.ai/v2/agent/{{ $env.GPTMAKER_AGENT_ID }}/conversation",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"contextId\": \"{{ $json.body.phone }}\",\n  \"prompt\": \"{{ $json.body.text.message }}\",\n  \"chatName\": \"{{ $json.body.chatName }}\",\n  \"phone\": \"{{ $json.body.phone }}\",\n  \"callbackUrl\": \"{{ $env.CALLBACK_URL }}\",\n  \"onFinishCallback\": \"{{ $env.DATACRAZY_WEBHOOK_URL }}\"\n}",
+        "options": {}
+      },
+      "id": "a1b2c3d4-3333-4000-8000-000000000003",
+      "name": "Enviar a GPTMaker",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [720, 200],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "CREDENTIAL_ID",
+          "name": "GPTMaker Bearer Token"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "a1b2c3d4-4444-4000-8000-000000000004",
+      "name": "No Action (fromMe=true)",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [720, 420]
+    }
+  ],
+  "connections": {
+    "Webhook Z-API": {
+      "main": [
+        [
+          {
+            "node": "Filtrar fromMe",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filtrar fromMe": {
+      "main": [
+        [
+          {
+            "node": "Enviar a GPTMaker",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Action (fromMe=true)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "pinData": {}
+}

@@ -1,0 +1,22 @@
+# Copia este archivo como .dev.vars y completa con tus credenciales
+# wrangler dev usa este archivo para inyectar variables de entorno
+
+# === Credenciales (secrets en produccion) ===
+GPTMAKER_TOKEN=Bearer TU_TOKEN_GPTMAKER
+GPTMAKER_AGENT_ID=TU_AGENT_ID
+ZAPI_INSTANCE_ID=TU_INSTANCE_ID
+ZAPI_TOKEN=TU_TOKEN_ZAPI
+DATACRAZY_WEBHOOK_URL=https://crm.datacrazy.io/api/crm/integrations/webhook/business/TU_UUID
+WORKER_URL=http://localhost:8787
+
+# === Horario de atencion del bot ===
+SCHEDULE_START_HOUR=8
+SCHEDULE_END_HOUR=22
+TIMEZONE=America/Sao_Paulo
+WEEKEND_ACTIVE=true
+
+# === Deteccion de operador ===
+# Tiempo en segundos que el bot se pausa cuando el operador responde manualmente
+PAUSE_TTL_SECONDS=1800
+# Ventana en segundos para detectar que un mensaje fromMe fue enviado por el bot
+BOT_SENT_TTL_SECONDS=10

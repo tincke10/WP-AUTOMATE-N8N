@@ -1,0 +1,31 @@
+name = "wp-automate-zapi-gptmaker"
+main = "src/worker.js"
+compatibility_date = "2024-01-01"
+
+# KV Namespace para estado de conversaciones (pausa operador, bot-sent)
+# Crear con: npx wrangler kv namespace create KV
+# Luego reemplazar el id con el que te devuelva el comando
+[[kv_namespaces]]
+binding = "KV"
+id = "TU_KV_NAMESPACE_ID"
+
+# Variables de configuracion (ajustar segun tu necesidad)
+[vars]
+GPTMAKER_AGENT_ID = "TU_AGENT_ID"
+
+# Horario de atencion del bot
+SCHEDULE_START_HOUR = "8"
+SCHEDULE_END_HOUR = "22"
+TIMEZONE = "America/Sao_Paulo"
+WEEKEND_ACTIVE = "true"
+
+# Deteccion de operador
+PAUSE_TTL_SECONDS = "1800"
+BOT_SENT_TTL_SECONDS = "10"
+
+# Las variables sensibles se configuran como secrets:
+# npx wrangler secret put GPTMAKER_TOKEN
+# npx wrangler secret put ZAPI_INSTANCE_ID
+# npx wrangler secret put ZAPI_TOKEN
+# npx wrangler secret put DATACRAZY_WEBHOOK_URL
+# npx wrangler secret put WORKER_URL

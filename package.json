@@ -1,0 +1,14 @@
+{
+  "name": "wp-automate-n8n",
+  "version": "1.0.0",
+  "description": "Cloudflare Worker bridge: Z-API + GPTMaker + Datacrazy CRM",
+  "main": "src/worker.js",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "tail": "wrangler tail"
+  },
+  "devDependencies": {
+    "wrangler": "^4.71.0"
+  }
+}
